@@ -58,53 +58,8 @@ const observer = new IntersectionObserver(entries => entries.forEach(entry => {
 }), { threshold: .12 });
 document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
 
-document.querySelectorAll('.skill-card').forEach(card => {
-  card.addEventListener('pointerdown', event => {
-    if (card.classList.contains('tools-card')) {
-      card.classList.remove('is-touched');
-      requestAnimationFrame(() => card.classList.add('is-touched'));
-      setTimeout(() => card.classList.remove('is-touched'), 760);
-    }
-    const bounds = card.getBoundingClientRect();
-    const ripple = document.createElement('span');
-    ripple.className = 'touch-ripple';
-    ripple.style.left = `${event.clientX - bounds.left}px`;
-    ripple.style.top = `${event.clientY - bounds.top}px`;
-    card.querySelectorAll('.touch-ripple').forEach(existing => existing.remove());
-    card.appendChild(ripple);
-    ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
-  });
-  card.addEventListener('pointermove', event => {
-    if (event.pointerType === 'touch') return;
-    const bounds = card.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width;
-    const y = (event.clientY - bounds.top) / bounds.height;
-    card.style.setProperty('--tilt-x', `${(x - 0.5) * 8}deg`);
-    card.style.setProperty('--tilt-y', `${(0.5 - y) * 8}deg`);
-    card.style.setProperty('--spot-x', `${x * 100}%`);
-    card.style.setProperty('--spot-y', `${y * 100}%`);
-  });
-  card.addEventListener('pointerleave', () => {
-    card.style.setProperty('--tilt-x', '0deg');
-    card.style.setProperty('--tilt-y', '0deg');
-    card.style.setProperty('--spot-x', '50%');
-    card.style.setProperty('--spot-y', '50%');
-  });
-});
-
-document.querySelectorAll('#skills .skill-card').forEach(card => {
+document.querySelectorAll('.skill-card-modern').forEach(card => {
   card.setAttribute('tabindex', '0');
-  const animateCard = () => {
-    card.classList.remove('skill-card-flip');
-    requestAnimationFrame(() => card.classList.add('skill-card-flip'));
-  };
-  card.addEventListener('click', animateCard);
-  card.addEventListener('keydown', event => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      animateCard();
-    }
-  });
 });
 
 document.querySelectorAll('[data-counter]').forEach(counter => {
@@ -135,20 +90,6 @@ const skillsProgressObserver = new IntersectionObserver(entries => {
 const skillsProgressSection = document.querySelector('.skills-section');
 if (skillsProgressSection) skillsProgressObserver.observe(skillsProgressSection);
 
-document.querySelectorAll('.skill-card-modern').forEach(card => {
-  card.addEventListener('pointermove', event => {
-    if (event.pointerType === 'touch') return;
-    const bounds = card.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width;
-    const y = (event.clientY - bounds.top) / bounds.height;
-    card.style.setProperty('--tilt-x', `${(x - 0.5) * 5}deg`);
-    card.style.setProperty('--tilt-y', `${(0.5 - y) * 5}deg`);
-  });
-  card.addEventListener('pointerleave', () => {
-    card.style.setProperty('--tilt-x', '0deg');
-    card.style.setProperty('--tilt-y', '0deg');
-  });
-});
 
 document.querySelectorAll('.filter').forEach(filter => filter.addEventListener('click', () => {
   document.querySelector('.filter.active').classList.remove('active');
